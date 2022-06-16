@@ -1,0 +1,8 @@
+﻿@{
+    Layout = "_LayoutPhone";
+    ViewData["Title"] = "Upload Your Button";
+}
+<form method="post" enctype="multipart/form-data" asp-action="Index">
+    <input type="file" id="file" name="file" accept=".jpg, .jpeg, .png" value="">
+    <button type="submit">Submit Image</button>
+</form>

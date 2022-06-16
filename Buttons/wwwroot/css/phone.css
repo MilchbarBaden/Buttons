@@ -1,0 +1,16 @@
+﻿input, button {
+    display: block;
+    margin: 2rem auto;
+}
+
+button {
+    height: 2rem;
+    width: calc(100vw - 6rem);
+}
+
+input[type=file] {
+    padding: 1rem;
+    height: calc(100vh - 10rem - 10px);
+    width: calc(100vw - 8rem);
+    border: 5px solid #228b22;
+}
