@@ -41,8 +41,7 @@ namespace Buttons.Controllers
                 }
 
                 string buttonsFolder = Path.Combine(environment.WebRootPath, ButtonsPath);
-                string extension = Path.GetExtension(file.FileName);
-                string fileName = $"{Guid.NewGuid():N}{extension}";
+                string fileName = Guid.NewGuid().ToString("N");
                 string targetPath = Path.Combine(buttonsFolder, fileName);
 
                 using var fileStream = new FileStream(targetPath, FileMode.Create);

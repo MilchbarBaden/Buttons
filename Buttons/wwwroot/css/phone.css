@@ -1,16 +1,71 @@
-﻿input, button {
+﻿* {
+    font-family: 'Helvetica', sans-serif;
+}
+
+body {
+    background-color: #222;
+}
+
+button, .file-box {
     display: block;
-    margin: 2rem auto;
+    margin: 1rem auto;
 }
 
 button {
     height: 2rem;
-    width: calc(100vw - 6rem);
+    width: calc(100vw - 2rem);
+
+    border: none;
 }
 
-input[type=file] {
-    padding: 1rem;
-    height: calc(100vh - 10rem - 10px);
-    width: calc(100vw - 8rem);
-    border: 5px solid #228b22;
+.file-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    height: calc(100vh - 5rem - 10px);
+    width: calc(100vw - 2rem - 10px);
+    border: 5px solid #555;
+    border-radius: 10px 10px;
+}
+
+.file-box label {
+    color: #999;
+    font-size: 3rem;
+
+    display: block;
+    height: 7rem;
+    width: 15rem;
+}
+
+.file-icon {
+    filter: invert(66%) sepia(0%) saturate(3239%) hue-rotate(229deg) brightness(98%) contrast(65%);
+
+    display: inline;
+    width: 3rem;
+    height: 3rem;
+}
+
+.file-preview {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.file-preview.visible {
+    opacity: 1;
+}
+
+#file {
+    opacity: 0;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
 }
