@@ -6,6 +6,13 @@ body {
     background-color: #222;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+}
+
 button, .file-box {
     display: block;
     margin: 1rem auto;
@@ -14,6 +21,7 @@ button, .file-box {
 button {
     height: 4rem;
     width: calc(100vw - 2rem);
+    margin-top: 0;
 
     cursor: pointer;
     font-size: 2.5rem;
@@ -31,13 +39,21 @@ button:hover, button:active {
     background-color: #999;
 }
 
+button[disabled] {
+    margin: 0;
+    opacity: 0;
+    height: 0;
+    font-size: 0;
+    cursor: default;
+}
+
 .file-box {
     display: flex;
     align-items: center;
     justify-content: center;
 
     position: relative;
-    height: calc(100vh - 7rem - 10px);
+    flex: 1; /* filling remaining height */
     width: calc(100vw - 2rem - 10px);
     border: 5px solid #555;
     border-radius: 10px;

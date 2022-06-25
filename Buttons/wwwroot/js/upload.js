@@ -1,22 +1,36 @@
 ﻿'use strict';
 
+function setFilePreviews(src, visible) {
+    const previews = document.getElementsByClassName('file-preview');
+    for (const preview of previews) {
+        preview.setAttribute('src', src);
+        if (visible) {
+            preview.classList.add('visible');
+        } else {
+            preview.classList.remove('visible');
+        }
+    }
+
+}
+
 function onFileChange(event) {
+    const submit = document.querySelector('button[type=submit]');
+
     const files = [...event.target.files];
     const file = files.find(f => f.type.startsWith('image/'));
 
     if (!file) {
-        alert("Invalid File! Plese select something else.")
+        submit.setAttribute('disabled', 'disabled');
+        setFilePreviews('//:0', false);
+        alert('Invalid File! Plese select something else.');
         return;
     }
 
     const reader = new FileReader();
 
     reader.onload = event => {
-        const previews = document.getElementsByClassName('file-preview');
-        for (const preview of previews) {
-            preview.setAttribute('src', event.target.result);
-            preview.classList.add('visible');
-        }
+        setFilePreviews(event.target.result, true);
+        submit.removeAttribute('disabled');
     };
 
     reader.readAsDataURL(file);
