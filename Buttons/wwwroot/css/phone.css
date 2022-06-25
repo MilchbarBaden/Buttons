@@ -12,10 +12,23 @@ button, .file-box {
 }
 
 button {
-    height: 2rem;
+    height: 4rem;
     width: calc(100vw - 2rem);
 
-    border: none;
+    cursor: pointer;
+    font-size: 2.5rem;
+    color: #999;
+    border: 5px solid #555;
+    border-radius: 10px;
+    background-color: transparent;
+
+    transition: 0.25s;
+}
+
+button:hover, button:active {
+    color: #333;
+    border-color: #999;
+    background-color: #999;
 }
 
 .file-box {
@@ -24,10 +37,10 @@ button {
     justify-content: center;
 
     position: relative;
-    height: calc(100vh - 5rem - 10px);
+    height: calc(100vh - 7rem - 10px);
     width: calc(100vw - 2rem - 10px);
     border: 5px solid #555;
-    border-radius: 10px 10px;
+    border-radius: 10px;
 }
 
 .file-box label {
