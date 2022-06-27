@@ -1,4 +1,10 @@
+using Buttons.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ButtonContext>(
+    options => options.UseInMemoryDatabase("buttonDatabase"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
