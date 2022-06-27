@@ -1,5 +1,8 @@
-﻿@{
+﻿@model ButtonViewModel
+@{
     Layout = "_LayoutPhone";
     ViewData["Title"] = "Crop The Button";
 }
-hello
+
+1: <img src="~/buttons/@Model.Path" /><br />
+2: @Model.Crop.Scale

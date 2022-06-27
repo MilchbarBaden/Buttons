@@ -1,20 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
+using Buttons.Data;
+using Buttons.Models;
 
 namespace Buttons.Controllers
 {
     public class ButtonController : Controller
     {
-        private const string ButtonsPath = "buttons";
+        private const string ButtonsFolder = "buttons";
+        private readonly string[] allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
 
+        private readonly ButtonContext context;
         private readonly ILogger<ButtonController> logger;
-        private readonly IWebHostEnvironment environment;
+        private readonly string buttonsPath;
 
-        public ButtonController(ILogger<ButtonController> logger, IWebHostEnvironment environment)
+        public ButtonController(
+            ButtonContext context,
+            ILogger<ButtonController> logger,
+            IWebHostEnvironment environment)
         {
+            this.context = context;
             this.logger = logger;
-            this.environment = environment;
+            buttonsPath = Path.Combine(environment.WebRootPath, ButtonsFolder);
         }
 
         public ActionResult Index()
@@ -28,7 +35,7 @@ namespace Buttons.Controllers
         {
             try
             {
-                var files = HttpContext.Request.Form.Files;
+                var files = collection.Files;
                 if (!ModelState.IsValid || files.Count != 1)
                 {
                     return View();
@@ -40,14 +47,30 @@ namespace Buttons.Controllers
                     return View();
                 }
 
-                string buttonsFolder = Path.Combine(environment.WebRootPath, ButtonsPath);
-                string fileName = Guid.NewGuid().ToString("N");
-                string targetPath = Path.Combine(buttonsFolder, fileName);
+                var extension = Path.GetExtension(file.FileName);
+                if (!allowedExtensions.Contains(extension, StringComparer.InvariantCultureIgnoreCase))
+                {
+                    extension = allowedExtensions.FirstOrDefault();
+                }
+
+                string fileName = $"{Guid.NewGuid():N}{extension}";
+                string targetPath = Path.Combine(buttonsPath, fileName);
 
                 using var fileStream = new FileStream(targetPath, FileMode.Create);
                 await file.CopyToAsync(fileStream);
 
-                return RedirectToAction(nameof(Crop));
+                // Add button metadata to database.
+                var button = new Button
+                {
+                    Name = file.FileName,
+                    Path = fileName,
+                    Status = ButtonStatus.Uploaded,
+                };
+                context.Buttons.Add(button);
+                await context.SaveChangesAsync();
+
+                logger.LogInformation("Created button {} with filename '{}'", button.Id, targetPath);
+                return RedirectToAction(nameof(Crop), null, new { id = button.Id });
             }
             catch
             {
@@ -55,9 +78,17 @@ namespace Buttons.Controllers
             }
         }
 
-        public ActionResult Crop()
+        public ActionResult Crop(int id)
         {
-            return View();
+            var button = context.Buttons.SingleOrDefault(b => b.Id == id);
+            if (button == null)
+            {
+                logger.LogWarning("Button {} not found!", id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            var viewModel = new ButtonViewModel(button.Path, button.Crop.Clone());
+            return View(viewModel);
         }
     }
 }
