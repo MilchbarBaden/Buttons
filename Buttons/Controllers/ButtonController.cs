@@ -87,7 +87,7 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new ButtonViewModel(button.Path, button.Crop.Clone());
+            var viewModel = new ButtonViewModel(button.Id, button.Path, button.Crop.Clone());
             return View(viewModel);
         }
     }

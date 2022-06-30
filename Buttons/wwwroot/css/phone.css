@@ -7,7 +7,12 @@ body {
     background-color: #222;
 }
 
-form {
+.filled {
+    width: 100%;
+    height: 100%;
+}
+
+.flex-container {
     display: flex;
     flex-direction: column;
     width: 100vw;
@@ -23,14 +28,12 @@ button {
     height: 4rem;
     width: calc(100vw - 2rem);
     margin-top: 0;
-
     cursor: pointer;
     font-size: 2.5rem;
     color: #999;
     border: 5px solid #555;
     border-radius: 10px;
     background-color: transparent;
-
     transition: 0.25s;
 }
 
@@ -52,7 +55,6 @@ button[disabled] {
     display: flex;
     align-items: center;
     justify-content: center;
-
     position: relative;
     flex: 1; /* filling remaining height */
     width: calc(100vw - 2rem - 10px);
@@ -63,7 +65,6 @@ button[disabled] {
 .file-box label {
     color: #999;
     font-size: 3rem;
-
     display: block;
     height: 7rem;
     width: 15rem;
@@ -71,7 +72,6 @@ button[disabled] {
 
 .file-icon {
     filter: invert(66%) sepia(0%) saturate(3239%) hue-rotate(229deg) brightness(98%) contrast(65%);
-
     display: inline;
     width: 3rem;
     height: 3rem;
@@ -98,4 +98,22 @@ button[disabled] {
     left: -5px;
     width: calc(100% + 10px);
     height: calc(100% + 10px);
+}
+
+#crop-image {
+    object-fit: contain;
+    max-width: 100%;
+}
+
+.cropper-view-box, .cropper-face {
+    border-radius: 50%;
+}
+
+span.cropper-view-box {
+    outline: 3px solid #248232;
+}
+
+span.cropper-face {
+    opacity: 1;
+    background: radial-gradient(closest-side, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0.1) 86%, rgba(0, 0, 0, 0.5) 87%, rgba(0, 0, 0, 0.5) 100%);
 }

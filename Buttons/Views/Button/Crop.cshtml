@@ -4,5 +4,15 @@
     ViewData["Title"] = "Crop The Button";
 }
 
-1: <img src="~/buttons/@Model.Path" /><br />
-2: @Model.Crop.Scale
+@section Scripts
+{
+    <script src="~/lib/cropperjs/cropper.min.js" type="text/javascript"></script>
+    <script src="~/js/crop.js" asp-append-version="true" type="text/javascript"></script>
+}
+
+<form method="post" asp-action="Crop" asp-route-id="@Model.Id" class="flex-container">
+    <div class="file-box">
+        <div class="filled"><img id="crop-image" src="~/buttons/@Model.Path" /></div>
+    </div>
+    <button type="submit">Next</button>
+</form>
