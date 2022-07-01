@@ -8,11 +8,13 @@ namespace Buttons.Controllers
     public class ButtonController : Controller
     {
         private const string ButtonsFolder = "buttons";
+        private readonly string buttonsPath;
         private readonly string[] allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
 
         private readonly ButtonContext context;
         private readonly ILogger<ButtonController> logger;
-        private readonly string buttonsPath;
+
+        private Session Session => new Session(HttpContext.Session);
 
         public ButtonController(
             ButtonContext context,
@@ -27,6 +29,18 @@ namespace Buttons.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        private string GetSanitisedExtension(string fileName)
+        {
+            string? input = null;
+            try { input = Path.GetExtension(fileName); }
+            catch { } // Ignore invalid user input
+
+            return allowedExtensions.FirstOrDefault(
+                e => e.Equals(input, StringComparison.InvariantCultureIgnoreCase),
+                allowedExtensions.First()
+            );
         }
 
         [HttpPost]
@@ -47,12 +61,7 @@ namespace Buttons.Controllers
                     return View();
                 }
 
-                var extension = Path.GetExtension(file.FileName);
-                if (!allowedExtensions.Contains(extension, StringComparer.InvariantCultureIgnoreCase))
-                {
-                    extension = allowedExtensions.FirstOrDefault();
-                }
-
+                var extension = GetSanitisedExtension(file.FileName);
                 string fileName = $"{Guid.NewGuid():N}{extension}";
                 string targetPath = Path.Combine(buttonsPath, fileName);
 
@@ -65,6 +74,7 @@ namespace Buttons.Controllers
                     Name = file.FileName,
                     Path = fileName,
                     Status = ButtonStatus.Uploaded,
+                    OwnerUserId = Session.GetUserId(),
                 };
                 context.Buttons.Add(button);
                 await context.SaveChangesAsync();
