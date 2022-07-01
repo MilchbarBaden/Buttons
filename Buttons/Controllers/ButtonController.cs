@@ -90,5 +90,27 @@ namespace Buttons.Controllers
             var viewModel = new ButtonViewModel(button.Id, button.Path, button.Crop.Clone());
             return View(viewModel);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Crop(int id, double x, double y, double width, double height, double scaleX, double scaleY)
+        {
+            var button = context.Buttons.SingleOrDefault(b => b.Id == id);
+            if (button == null)
+            {
+                logger.LogWarning("Button {} not found!", id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            button.Crop = new Crop()
+            {
+                Offset = (x, y),
+                Size = (width, height),
+                Scale = (scaleX, scaleY),
+            };
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(); // TODO
+        }
     }
 }
