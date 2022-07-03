@@ -1,7 +1,7 @@
 ﻿@model ButtonViewModel
 @{
     Layout = "_LayoutPhone";
-    ViewData["Title"] = "Crop The Button";
+    ViewData["Title"] = "Crop the Button";
 }
 
 @section Scripts
@@ -11,12 +11,7 @@
 }
 
 <form id="crop-form" method="post" asp-action="Crop" asp-route-id="@Model.Id" class="flex-container">
-    <input type="hidden" name="x" value="@Model.Crop.Offset.x" />
-    <input type="hidden" name="y" value="@Model.Crop.Offset.y" />
-    <input type="hidden" name="width" value="@Model.Crop.Size.x" />
-    <input type="hidden" name="height" value="@Model.Crop.Size.y" />
-    <input type="hidden" name="scaleX" value="@Model.Crop.Scale.x" />
-    <input type="hidden" name="scaleY" value="@Model.Crop.Scale.y" />
+    <partial name="_CropFields.cshtml" for="Crop" />
     <div class="file-box">
         <div class="filled"><img id="crop-image" src="~/buttons/@Model.Path" /></div>
     </div>

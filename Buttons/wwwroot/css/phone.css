@@ -107,6 +107,8 @@ button[disabled] {
     height: calc(100% + 10px);
 }
 
+/* Crop */
+
 #crop-image {
     object-fit: contain;
     max-width: 100%;
@@ -123,4 +125,19 @@ span.cropper-view-box {
 span.cropper-face {
     opacity: 1;
     background: radial-gradient(closest-side, rgba(255, 255, 255, 0.1) 0, rgba(255, 255, 255, 0.1) 86%, rgba(0, 0, 0, 0.5) 87%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* Confirm */
+
+#confirm-image-outer {
+    position: relative;
+    width: min(100vw - 2rem - 10px - 6px, 50vh);
+    height: min(100vw - 2rem - 10px - 6px, 50vh);
+    border-radius: 50%;
+    border: 3px solid #248232;
+    overflow: hidden;
+}
+
+#confirm-image {
+    position: relative;
 }

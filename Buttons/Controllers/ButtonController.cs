@@ -43,6 +43,9 @@ namespace Buttons.Controllers
             );
         }
 
+        private ButtonViewModel CreateViewModel(Button button) =>
+            new(button.Id, button.Path, button.Crop.Clone());
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index(IFormCollection collection)
@@ -97,8 +100,7 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var viewModel = new ButtonViewModel(button.Id, button.Path, button.Crop.Clone());
-            return View(viewModel);
+            return View(CreateViewModel(button));
         }
 
         [HttpPost]
@@ -112,15 +114,68 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Cannot change a button that was already printed.
+            //
+            // This is only handled on the post action:
+            // For printed buttons no edit link should be shown,
+            // so this action should not be reached through regular means.
+            if (button.Status == ButtonStatus.Printed)
+            {
+                // TODO: Redirect to button overview page
+                return RedirectToAction(nameof(Index));
+            }
+
             button.Crop = new Crop()
             {
                 Offset = (x, y),
                 Size = (width, height),
                 Scale = (scaleX, scaleY),
             };
+            button.Status = ButtonStatus.Uploaded;
             await context.SaveChangesAsync();
 
-            return RedirectToAction(); // TODO
+            return RedirectToAction(nameof(Confirm), null, new { id });
+        }
+
+        public ActionResult Confirm(int id)
+        {
+            var button = context.Buttons.SingleOrDefault(b => b.Id == id);
+            if (button == null)
+            {
+                logger.LogWarning("Button {} not found!", id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(CreateViewModel(button));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Confirm(int id, IFormCollection collection)
+        {
+            if (!collection.ContainsKey("confirm"))
+            {
+                return RedirectToAction(nameof(Crop), null, new { id });
+            }
+
+            var button = context.Buttons.SingleOrDefault(b => b.Id == id);
+            if (button == null)
+            {
+                logger.LogWarning("Button {} not found!", id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Cannot change a button that was already printed.
+            if (button.Status == ButtonStatus.Printed)
+            {
+                // TODO: Redirect to button overview page
+                return RedirectToAction(nameof(Index));
+            }
+
+            button.Status = ButtonStatus.Confirmed;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index)); // TODO
         }
     }
 }
