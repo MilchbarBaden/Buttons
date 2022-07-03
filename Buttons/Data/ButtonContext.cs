@@ -5,6 +5,7 @@ namespace Buttons.Data
     public class ButtonContext : DbContext
     {
         public DbSet<Button> Buttons => Set<Button>();
+        public DbSet<Owner> Owners => Set<Owner>();
 
         public ButtonContext(DbContextOptions<ButtonContext> dbContextOptions) : base(dbContextOptions)
         {

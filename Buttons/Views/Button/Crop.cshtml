@@ -10,7 +10,7 @@
     <script src="~/js/crop.js" asp-append-version="true" type="text/javascript"></script>
 }
 
-<form id="crop-form" method="post" asp-action="Crop" asp-route-id="@Model.Id" class="flex-container">
+<form id="crop-form" method="post" asp-route-id="@Model.Id" class="flex-container">
     <partial name="_CropFields.cshtml" for="Crop" />
     <div class="file-box">
         <div class="filled"><img id="crop-image" src="~/buttons/@Model.Path" /></div>

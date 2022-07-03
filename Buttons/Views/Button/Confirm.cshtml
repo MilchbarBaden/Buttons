@@ -9,7 +9,7 @@
     <script src="~/js/confirm.js" asp-append-version="true" type="text/javascript"></script>
 }
 
-<form method="post" asp-action="Confirm" asp-route-id="@Model.Id" class="flex-container">
+<form method="post" asp-route-id="@Model.Id" class="flex-container">
     <partial name="_CropFields.cshtml" for="Crop" />
     <div class="file-box">
         <div id="confirm-image-outer"><img id="confirm-image" src="~/buttons/@Model.Path" /></div>

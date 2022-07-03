@@ -1,0 +1,10 @@
+﻿@model NameViewModel
+@{
+    Layout = "_LayoutPhone";
+    ViewData["Title"] = "Enter Your Name";
+}
+
+<form method="post" class="flex-container">
+    <input type="text" name="username" placeholder="Your Name..." required="required" value="@Model.Name" />
+    <button type="submit">Next</button>
+</form>

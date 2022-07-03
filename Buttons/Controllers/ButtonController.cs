@@ -14,7 +14,7 @@ namespace Buttons.Controllers
         private readonly ButtonContext context;
         private readonly ILogger<ButtonController> logger;
 
-        private Session Session => new Session(HttpContext.Session);
+        private Session Session => new Session(HttpContext.Session, context);
 
         public ButtonController(
             ButtonContext context,
@@ -24,11 +24,6 @@ namespace Buttons.Controllers
             this.context = context;
             this.logger = logger;
             buttonsPath = Path.Combine(environment.WebRootPath, ButtonsFolder);
-        }
-
-        public ActionResult Index()
-        {
-            return View();
         }
 
         private string GetSanitisedExtension(string fileName)
@@ -46,9 +41,43 @@ namespace Buttons.Controllers
         private ButtonViewModel CreateViewModel(Button button) =>
             new(button.Id, button.Path, button.Crop.Clone());
 
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<ActionResult> Name()
+        {
+            var owner = await Session.GetOrCreateOwnerAsync();
+            return View(new NameViewModel(owner.Name));
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(IFormCollection collection)
+        public async Task<ActionResult> Name(string username)
+        {
+            var owner = await Session.GetOrCreateOwnerAsync();
+
+
+            if (owner == null || string.IsNullOrEmpty(username))
+            {
+                return RedirectToAction(nameof(Name));
+            }
+
+            owner.Name = username;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Create));
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
@@ -72,12 +101,11 @@ namespace Buttons.Controllers
                 await file.CopyToAsync(fileStream);
 
                 // Add button metadata to database.
-                var button = new Button
+                var button = new Button(await Session.GetOrCreateOwnerAsync())
                 {
                     Name = file.FileName,
                     Path = fileName,
                     Status = ButtonStatus.Uploaded,
-                    OwnerUserId = Session.GetUserId(),
                 };
                 context.Buttons.Add(button);
                 await context.SaveChangesAsync();
