@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ButtonListViewModel
+@{
     Layout = "_LayoutPhone";
     ViewData["Title"] = "Your Buttons";
 }
@@ -7,4 +8,8 @@
 {
 }
 
-Buttons list
+<ul>
+@foreach (var button in Model.Items) {
+    <li>@button.Path</li>
+}
+</ul>

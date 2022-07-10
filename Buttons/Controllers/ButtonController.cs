@@ -41,9 +41,14 @@ namespace Buttons.Controllers
         private ButtonViewModel CreateViewModel(Button button) =>
             new(button.Id, button.Path, button.Crop.Clone());
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var owner = await Session.GetOrCreateOwnerAsync();
+            var buttons = context.Buttons
+                .Where(b => b.OwnerId == owner.Id)
+                .Select(CreateViewModel)
+                .ToList();
+            return View(new ButtonListViewModel(buttons));
         }
 
         public async Task<ActionResult> Name()
@@ -57,8 +62,6 @@ namespace Buttons.Controllers
         public async Task<ActionResult> Name(string username)
         {
             var owner = await Session.GetOrCreateOwnerAsync();
-
-
             if (owner == null || string.IsNullOrEmpty(username))
             {
                 return RedirectToAction(nameof(Name));

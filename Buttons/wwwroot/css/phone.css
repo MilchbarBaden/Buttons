@@ -22,7 +22,7 @@ body {
     height: calc(100vh - 1rem);
 }
 
-button, input[type=text], .file-box {
+button, input[type=text], .fill-box {
     display: block;
     margin: 0 auto 1rem auto;
 }
@@ -78,18 +78,24 @@ input[type=text]:focus-visible {
     outline: none;
 }
 
-.file-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    flex: 1; /* filling remaining height */
-    width: calc(100vw - 2rem - 10px);
+.border {
     border: 5px solid #555;
     border-radius: 10px;
 }
 
-.file-box label {
+.fill-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    flex: 1; /* filling remaining height */
+
+    box-sizing: border-box;
+    width: calc(100vw - 2rem);
+}
+
+.fill-box label {
     color: #999;
     font-size: 3rem;
     display: block;

@@ -11,7 +11,7 @@
 
 <form method="post" asp-route-id="@Model.Id" class="flex-container">
     <partial name="_CropFields.cshtml" for="Crop" />
-    <div class="file-box">
+    <div class="fill-box">
         <div id="confirm-image-outer"><img id="confirm-image" src="~/buttons/@Model.Path" /></div>
     </div>
     <button type="submit" name="decline">Back</button>

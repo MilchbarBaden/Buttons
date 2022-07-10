@@ -12,7 +12,7 @@
 
 <form id="crop-form" method="post" asp-route-id="@Model.Id" class="flex-container">
     <partial name="_CropFields.cshtml" for="Crop" />
-    <div class="file-box">
+    <div class="fill-box border">
         <div class="filled"><img id="crop-image" src="~/buttons/@Model.Path" /></div>
     </div>
     <button type="button" id="crop-reset">Reset</button>
