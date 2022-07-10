@@ -104,7 +104,8 @@ namespace Buttons.Controllers
                 await file.CopyToAsync(fileStream);
 
                 // Add button metadata to database.
-                var button = new Button(await Session.GetOrCreateOwnerAsync())
+                var owner = await Session.GetOrCreateOwnerAsync();
+                var button = new Button(owner)
                 {
                     Name = file.FileName,
                     Path = fileName,
@@ -113,7 +114,7 @@ namespace Buttons.Controllers
                 context.Buttons.Add(button);
                 await context.SaveChangesAsync();
 
-                logger.LogInformation("Created button {} with filename '{}'", button.Id, targetPath);
+                logger.LogInformation("Created button {} with filename '{}' for owner {}", button.Id, targetPath, owner.Id);
                 return RedirectToAction(nameof(Crop), null, new { id = button.Id });
             }
             catch
@@ -122,12 +123,13 @@ namespace Buttons.Controllers
             }
         }
 
-        public ActionResult Crop(int id)
+        public async Task<ActionResult> Crop(int id)
         {
+            var owner = await Session.GetOrCreateOwnerAsync();
             var button = context.Buttons.SingleOrDefault(b => b.Id == id);
-            if (button == null)
+            if (button == null || button.OwnerId != owner.Id)
             {
-                logger.LogWarning("Button {} not found!", id);
+                logger.LogWarning("Button {} not found or tried to access unowned button by {}!", id, owner.Id);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -138,21 +140,21 @@ namespace Buttons.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Crop(int id, double x, double y, double width, double height, double scaleX, double scaleY)
         {
+            var owner = await Session.GetOrCreateOwnerAsync();
             var button = context.Buttons.SingleOrDefault(b => b.Id == id);
-            if (button == null)
+            if (button == null || button.OwnerId != owner.Id)
             {
-                logger.LogWarning("Button {} not found!", id);
+                logger.LogWarning("Button {} not found or tried to access unowned button by {}!", id, owner.Id);
                 return RedirectToAction(nameof(Index));
             }
 
-            // Cannot change a button that was already printed.
+            // Cannot change a button that has already been printed.
             //
             // This is only handled on the post action:
             // For printed buttons no edit link should be shown,
             // so this action should not be reached through regular means.
             if (button.Status == ButtonStatus.Printed)
             {
-                // TODO: Redirect to button overview page
                 return RedirectToAction(nameof(Index));
             }
 
@@ -168,12 +170,13 @@ namespace Buttons.Controllers
             return RedirectToAction(nameof(Confirm), null, new { id });
         }
 
-        public ActionResult Confirm(int id)
+        public async Task<ActionResult> Confirm(int id)
         {
+            var owner = await Session.GetOrCreateOwnerAsync();
             var button = context.Buttons.SingleOrDefault(b => b.Id == id);
-            if (button == null)
+            if (button == null || button.OwnerId != owner.Id)
             {
-                logger.LogWarning("Button {} not found!", id);
+                logger.LogWarning("Button {} not found or tried to access unowned button by {}!", id, owner.Id);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -189,24 +192,24 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(Crop), null, new { id });
             }
 
+            var owner = await Session.GetOrCreateOwnerAsync();
             var button = context.Buttons.SingleOrDefault(b => b.Id == id);
-            if (button == null)
+            if (button == null || button.OwnerId != owner.Id)
             {
-                logger.LogWarning("Button {} not found!", id);
+                logger.LogWarning("Button {} not found or tried to access unowned button by {}!", id, owner.Id);
                 return RedirectToAction(nameof(Index));
             }
 
-            // Cannot change a button that was already printed.
+            // Cannot change a button that has already been printed.
             if (button.Status == ButtonStatus.Printed)
             {
-                // TODO: Redirect to button overview page
                 return RedirectToAction(nameof(Index));
             }
 
             button.Status = ButtonStatus.Confirmed;
             await context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index)); // TODO
+            return RedirectToAction(nameof(Index));
         }
     }
 }
