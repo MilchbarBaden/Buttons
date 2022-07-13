@@ -22,16 +22,19 @@ body {
     height: calc(100vh - 1rem);
 }
 
-button, input[type=text], .fill-box {
-    display: block;
+button, .button, input[type=text], .fill-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 0 auto 1rem auto;
 }
 
-button, input[type=text] {
+button, .button, input[type=text] {
     width: calc(100vw - 2rem);
     box-sizing: border-box;
 
     font-size: 2.5rem;
+    text-decoration: none;
     color: #999;
     background-color: transparent;
 
@@ -42,25 +45,25 @@ button, input[type=text] {
     transition: 0.25s;
 }
 
-button {
+button, .button {
     height: 4rem;
     cursor: pointer;
 }
 
-button:hover, button:focus-visible {
+button:hover, button:focus-visible, .button:hover, .button:focus-visible {
     color: #333;
     border-color: #999;
     background-color: #999;
 }
 
-button:active {
+button:active, .button:active {
     color: #333;
     border-color: #090;
     background-color: #090;
 
 }
 
-button[disabled] {
+button[disabled], .button[disabled] {
     margin: 0;
     opacity: 0;
     height: 0;
@@ -84,9 +87,6 @@ input[type=text]:focus-visible {
 }
 
 .fill-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
 
     flex: 1; /* filling remaining height */
@@ -94,6 +94,50 @@ input[type=text]:focus-visible {
     box-sizing: border-box;
     width: calc(100vw - 2rem);
 }
+
+.fill-box.scroll-box {
+    overflow-y: auto;
+    align-items: flex-start;
+}
+
+/* General Button */
+
+.button-outer {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 3px solid #248232;
+    overflow: hidden;
+}
+
+.button-image {
+    position: relative;
+}
+
+/* Overview */
+
+.overview {
+    width: 100%;
+    min-height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.overview-item {
+    width: min(50% - 0.5rem, 50vh);
+    height: auto;
+    aspect-ratio: 1;
+}
+
+/* Create */
 
 .fill-box label {
     color: #999;
@@ -155,15 +199,7 @@ span.cropper-face {
 
 /* Confirm */
 
-#confirm-image-outer {
-    position: relative;
-    width: min(100vw - 2rem - 10px - 6px, 50vh);
-    height: min(100vw - 2rem - 10px - 6px, 50vh);
-    border-radius: 50%;
-    border: 3px solid #248232;
-    overflow: hidden;
-}
-
-#confirm-image {
-    position: relative;
+.confirm-button-outer {
+    width: min(100vw - 2rem, 50vh);
+    height: min(100vw - 2rem, 50vh);
 }

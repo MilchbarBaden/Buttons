@@ -8,8 +8,25 @@
 {
 }
 
-<ul>
-@foreach (var button in Model.Items) {
-    <li>@button.Path</li>
-}
-</ul>
+<div class="flex-container">
+    <div class="fill-box border scroll-box">
+        @if (Model.Items.Count == 0)
+        {
+            <div>You don't have any buttons yet. You can create one by clicking "Create New" bellow.</div>
+        }
+        else
+        {
+            <div class="overview">
+                @foreach (var button in Model.Items)
+                {
+                    <div class="overview-item">
+                        <div class="button-outer">
+                            <img id="confirm-image" class="button-image" src="~/buttons/@button.Path" />
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+    <a asp-action="Create" class="button">Create New</a>
+</div>
