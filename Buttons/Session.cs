@@ -38,7 +38,7 @@ namespace Buttons
             var owner = context.Owners.SingleOrDefault(o => o.Id == userId);
             if (owner == null)
             {
-                owner = new Owner() { Id = userId, Name = "" };
+                owner = new Owner() { Id = userId, Name = string.Empty };
                 context.Owners.Add(owner);
                 await context.SaveChangesAsync();
             }

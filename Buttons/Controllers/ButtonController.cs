@@ -44,10 +44,21 @@ namespace Buttons.Controllers
         public async Task<ActionResult> Index()
         {
             var owner = await Session.GetOrCreateOwnerAsync();
+            if (string.IsNullOrWhiteSpace(owner.Name))
+            {
+                return RedirectToAction(nameof(Name));
+            }
+
             var buttons = context.Buttons
                 .Where(b => b.OwnerId == owner.Id)
                 .Select(CreateViewModel)
                 .ToList();
+
+            if (buttons.Count == 0)
+            {
+                return RedirectToAction(nameof(Create));
+            }
+
             return View(new ButtonListViewModel(buttons));
         }
 
@@ -62,7 +73,7 @@ namespace Buttons.Controllers
         public async Task<ActionResult> Name(string username)
         {
             var owner = await Session.GetOrCreateOwnerAsync();
-            if (owner == null || string.IsNullOrEmpty(username))
+            if (string.IsNullOrWhiteSpace(username))
             {
                 return RedirectToAction(nameof(Name));
             }
@@ -73,8 +84,14 @@ namespace Buttons.Controllers
             return RedirectToAction(nameof(Create));
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
+            var owner = await Session.GetOrCreateOwnerAsync();
+            if (string.IsNullOrWhiteSpace(owner.Name))
+            {
+                return RedirectToAction(nameof(Name));
+            }
+
             return View();
         }
 
@@ -82,6 +99,12 @@ namespace Buttons.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection)
         {
+            var owner = await Session.GetOrCreateOwnerAsync();
+            if (string.IsNullOrWhiteSpace(owner.Name))
+            {
+                return RedirectToAction(nameof(Name));
+            }
+
             try
             {
                 var files = collection.Files;
@@ -104,7 +127,6 @@ namespace Buttons.Controllers
                 await file.CopyToAsync(fileStream);
 
                 // Add button metadata to database.
-                var owner = await Session.GetOrCreateOwnerAsync();
                 var button = new Button(owner)
                 {
                     Name = file.FileName,
@@ -117,8 +139,9 @@ namespace Buttons.Controllers
                 logger.LogInformation("Created button {} with filename '{}' for owner {}", button.Id, targetPath, owner.Id);
                 return RedirectToAction(nameof(Crop), null, new { id = button.Id });
             }
-            catch
+            catch (Exception e)
             {
+                logger.LogError(e, "Encountered error while uploading file");
                 return View();
             }
         }
