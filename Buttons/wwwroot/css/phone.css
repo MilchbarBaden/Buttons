@@ -36,7 +36,7 @@ button, .button, input[type=text] {
     font-size: 2.5rem;
     text-decoration: none;
     color: #999;
-    background-color: transparent;
+    background-color: #222;
 
     border: 5px solid #555;
     outline: none;
@@ -108,9 +108,11 @@ input[type=text]:focus-visible {
     height: auto;
     aspect-ratio: 1;
     box-sizing: border-box;
+
     border-radius: 50%;
-    border: 3px solid #248232;
     overflow: hidden;
+    border: 3px solid #248232;
+    background-color: #fff;
 }
 
 .button-image {
@@ -135,6 +137,56 @@ input[type=text]:focus-visible {
     width: min(50% - 0.5rem, 50vh);
     height: auto;
     aspect-ratio: 1;
+}
+
+.overview-item .button-outer {
+    cursor: pointer;
+}
+
+#detail-view {
+    display: none;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 1rem 1rem 0 1rem;
+
+    background-color: rgba(0, 0, 0, 0.7);
+    font-size: 1.5rem;
+}
+
+#detail-close {
+    display: block;
+    align-self: flex-end;
+
+    color: #999;
+    font-size: 2rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#detail-close:hover, #detail-close:focus-visible {
+    color: #ccc;
+}
+
+.detail-button {
+    width: min(100vw - 2rem, 100vh - 2rem);
+    height: auto;
+    aspect-ratio: 1;
+}
+
+.detail-info {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Create */

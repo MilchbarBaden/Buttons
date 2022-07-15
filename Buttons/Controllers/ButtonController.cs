@@ -39,7 +39,7 @@ namespace Buttons.Controllers
         }
 
         private ButtonViewModel CreateViewModel(Button button) =>
-            new(button.Id, button.Path, button.Crop.Clone());
+            new(button.Id, button.Path, button.Status.ToString(), button.Crop.Clone());
 
         public async Task<ActionResult> Index()
         {
@@ -230,6 +230,29 @@ namespace Buttons.Controllers
             }
 
             button.Status = ButtonStatus.Confirmed;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<ActionResult> Delete(int id)
+        {
+            var owner = await Session.GetOrCreateOwnerAsync();
+            var button = context.Buttons.SingleOrDefault(button => button.Id == id);
+
+            if (button == null || button.OwnerId != owner.Id)
+            {
+                logger.LogWarning("Button {} not found or tried to access unowned button by {}!", id, owner.Id);
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Cannot delete a button that has already been printed.
+            if (button.Status == ButtonStatus.Printed)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            context.Buttons.Remove(button);
             await context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

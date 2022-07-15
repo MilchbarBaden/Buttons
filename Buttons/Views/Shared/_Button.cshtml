@@ -1,7 +1,7 @@
 ﻿@using System.Text.Json
 @model ButtonViewModel
 
-<div class="button-outer">
+<div class="button-outer" data-id="@Model.Id" data-status="@Model.Status">
     <img class="button-image" src="~/buttons/@Model.Path" />
     @{
         var options = new JsonSerializerOptions() { IncludeFields = true };

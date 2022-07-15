@@ -20,7 +20,12 @@ function getDataFromJson(script) {
  */
 function cropButton(outer) {
     const image = outer.getElementsByClassName('button-image')[0];
-    const jsonScript = outer.getElementsByTagName('script')[0];
+    const scripts = outer.getElementsByTagName('script');
+    if (scripts.length != 1) {
+        return;
+    }
+
+    const jsonScript = scripts[0];
     const data = getDataFromJson(jsonScript);
     const width = image.naturalWidth;
     const height = image.naturalHeight;
