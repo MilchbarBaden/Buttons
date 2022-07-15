@@ -1,0 +1,11 @@
+﻿@using System.Text.Json
+@model ButtonViewModel
+
+<div class="button-outer">
+    <img class="button-image" src="~/buttons/@Model.Path" />
+    @{
+        var options = new JsonSerializerOptions() { IncludeFields = true };
+        var json = JsonSerializer.Serialize(@Model.Crop, options);
+        <script type="application/json">@Html.Raw(json)</script>
+    }
+</div>

@@ -1,4 +1,5 @@
-﻿@model ButtonListViewModel
+﻿@using System.Text.Json
+@model ButtonListViewModel
 @{
     Layout = "_LayoutPhone";
     ViewData["Title"] = "Your Buttons";
@@ -6,6 +7,7 @@
 
 @section Scripts
 {
+    <script src="~/js/common.js" asp-append-version="true" type="text/javascript"></script>
 }
 
 <div class="flex-container">
@@ -20,9 +22,7 @@
                 @foreach (var button in Model.Items)
                 {
                     <div class="overview-item">
-                        <div class="button-outer">
-                            <img id="confirm-image" class="button-image" src="~/buttons/@button.Path" />
-                        </div>
+                        <partial name="_Button" for="@button" />
                     </div>
                 }
             </div>

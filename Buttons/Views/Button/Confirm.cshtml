@@ -6,14 +6,13 @@
 
 @section Scripts
 {
-    <script src="~/js/confirm.js" asp-append-version="true" type="text/javascript"></script>
+    <script src="~/js/common.js" asp-append-version="true" type="text/javascript"></script>
 }
 
 <form method="post" asp-route-id="@Model.Id" class="flex-container">
-    <partial name="_CropFields.cshtml" for="Crop" />
     <div class="fill-box">
         <div class="confirm-button-outer">
-            <div class="button-outer"><img id="confirm-image" class="button-image" src="~/buttons/@Model.Path" /></div>
+            <partial name="_Button" />
         </div>
     </div>
     <button type="submit" name="decline">Back</button>
