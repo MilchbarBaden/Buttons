@@ -15,10 +15,10 @@ namespace Buttons.Data
 
         private void ChangeTrackerTracked(object? sender, Microsoft.EntityFrameworkCore.ChangeTracking.EntityTrackedEventArgs e)
         {
-            if (!e.FromQuery && e.Entry.State == EntityState.Added && e.Entry.Entity is DateEntity dateEntity)
+            if (!e.FromQuery && e.Entry.State == EntityState.Added && e.Entry.Entity is DateEntity newEntity)
             {
-                dateEntity.Created = DateTime.Now;
-                dateEntity.LastModified = DateTime.Now;
+                newEntity.Created = DateTime.Now;
+                newEntity.LastModified = DateTime.Now;
             }
         }
 
@@ -27,6 +27,7 @@ namespace Buttons.Data
             if (e.NewState == EntityState.Modified && e.Entry.Entity is DateEntity dateEntity)
             {
                 dateEntity.LastModified = DateTime.Now;
+                SaveChanges();
             }
         }
     }

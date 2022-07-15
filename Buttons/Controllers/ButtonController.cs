@@ -51,6 +51,7 @@ namespace Buttons.Controllers
 
             var buttons = context.Buttons
                 .Where(b => b.OwnerId == owner.Id)
+                .OrderByDescending(b => b.LastModified)
                 .Select(CreateViewModel)
                 .ToList();
 

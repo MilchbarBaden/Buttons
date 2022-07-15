@@ -177,7 +177,7 @@ input[type=text]:focus-visible {
 }
 
 .detail-button {
-    width: min(100vw - 2rem, 100vh - 2rem);
+    width: min(100vw - 2rem, 50vh);
     height: auto;
     aspect-ratio: 1;
 }
