@@ -253,6 +253,17 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            try
+            {
+                string targetPath = Path.Combine(buttonsPath, button.Path);
+                System.IO.File.Delete(targetPath);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Failed to delete file {} of button {}", button.Path, id);
+                return RedirectToAction(nameof(Index));
+            }
+
             context.Buttons.Remove(button);
             await context.SaveChangesAsync();
 
