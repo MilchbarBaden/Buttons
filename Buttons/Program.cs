@@ -1,4 +1,5 @@
 using Buttons.Data;
+using Buttons.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
+
+builder.Services.AddSingleton<Configuration>();
 
 var app = builder.Build();
 

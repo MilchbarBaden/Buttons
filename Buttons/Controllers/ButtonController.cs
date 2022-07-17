@@ -2,28 +2,29 @@
 using Microsoft.AspNetCore.Mvc;
 using Buttons.Data;
 using Buttons.Models;
+using Buttons.Services;
 
 namespace Buttons.Controllers
 {
     public class ButtonController : Controller
     {
         private const string ButtonsFolder = "buttons";
-        private readonly string buttonsPath;
         private readonly string[] allowedExtensions = new[] { ".png", ".jpg", ".jpeg" };
 
         private readonly ButtonContext context;
         private readonly ILogger<ButtonController> logger;
+        private readonly Configuration configuration;
 
-        private Session Session => new Session(HttpContext.Session, context);
+        private Session Session => new(HttpContext.Session, context);
 
         public ButtonController(
             ButtonContext context,
             ILogger<ButtonController> logger,
-            IWebHostEnvironment environment)
+            Configuration configuration)
         {
             this.context = context;
             this.logger = logger;
-            buttonsPath = Path.Combine(environment.WebRootPath, ButtonsFolder);
+            this.configuration = configuration;
         }
 
         private string GetSanitisedExtension(string fileName)
@@ -122,7 +123,7 @@ namespace Buttons.Controllers
 
                 var extension = GetSanitisedExtension(file.FileName);
                 string fileName = $"{Guid.NewGuid():N}{extension}";
-                string targetPath = Path.Combine(buttonsPath, fileName);
+                string targetPath = Path.Combine(configuration.ButtonsPath, fileName);
 
                 using var fileStream = new FileStream(targetPath, FileMode.Create);
                 await file.CopyToAsync(fileStream);
@@ -255,7 +256,7 @@ namespace Buttons.Controllers
 
             try
             {
-                string targetPath = Path.Combine(buttonsPath, button.Path);
+                string targetPath = Path.Combine(configuration.ButtonsPath, button.Path);
                 System.IO.File.Delete(targetPath);
             }
             catch (Exception e)

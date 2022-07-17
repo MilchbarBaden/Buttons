@@ -1,0 +1,9 @@
+﻿@model ButtonListViewModel
+@{
+    ViewData["Title"] = "Select Buttons for Print";
+}
+
+@foreach (var button in Model.Items)
+{
+    <div>@button.Path</div>
+}

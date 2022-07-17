@@ -1,6 +1,6 @@
 ﻿using Buttons.Data;
 
-namespace Buttons
+namespace Buttons.Services
 {
     public class Session
     {
