@@ -1,9 +1,28 @@
-﻿@model ButtonListViewModel
+﻿@using System.Text.Json
+@model ButtonListViewModel
 @{
     ViewData["Title"] = "Select Buttons for Print";
 }
 
-@foreach (var button in Model.Items)
+@section Scripts
 {
-    <div>@button.Path</div>
+    <script src="~/js/common.js" asp-append-version="true" type="text/javascript"></script>
+    <script src="~/js/print-selection.js" asp-append-version="true" type="text/javascript"></script>
 }
+
+@{
+    var options = new JsonSerializerOptions() { IncludeFields = true };
+    var json = JsonSerializer.Serialize(@Model.Items, options);
+    <script id="selection-data" type="application/json">@Html.Raw(json)</script>
+}
+
+<form id="selection-form" method="post" asp-action="Print">
+    <section id="selection-filters">
+
+    </section>
+    <section id="selection-items"></section>
+    <section id="selection-buttons">
+        <button type="submit" name="print-selection" title="Print all buttons that were selected in the box above.">Print Selected Buttons</button>
+        <button type="submit" name="print-all" title="Print all buttons that were not printed yet.">Print All Buttons</button>
+    </section>
+</form>

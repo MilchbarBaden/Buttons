@@ -1,32 +1,29 @@
 ﻿'use strict';
 
+function flattenCropData(nestedData) {
+    return {
+        x: nestedData.Offset.Item1,
+        y: nestedData.Offset.Item2,
+        width: nestedData.Size.Item1,
+        height: nestedData.Size.Item2,
+        scaleX: nestedData.Scale.Item1,
+        scaleY: nestedData.Scale.Item2,
+    };
+}
+
 /**
  * @param {Element} script
  */
 function getDataFromJson(script) {
     const jsonData = JSON.parse(script.textContent);
-    return {
-        x: jsonData.Offset.Item1,
-        y: jsonData.Offset.Item2,
-        width: jsonData.Size.Item1,
-        height: jsonData.Size.Item2,
-        scaleX: jsonData.Scale.Item1,
-        scaleY: jsonData.Scale.Item2,
-    };
+    return flattenCropData(jsonData);
 }
 
 /**
  * @param {Element} outer
  */
-function cropButton(outer) {
+function cropButtonWithData(outer, data) {
     const image = outer.getElementsByClassName('button-image')[0];
-    const scripts = outer.getElementsByTagName('script');
-    if (scripts.length != 1) {
-        return;
-    }
-
-    const jsonScript = scripts[0];
-    const data = getDataFromJson(jsonScript);
     const width = image.naturalWidth;
     const height = image.naturalHeight;
     const factor = {
@@ -37,6 +34,19 @@ function cropButton(outer) {
     image.style['height'] = `${factor.y * 100}%`;
     image.style['left'] = `${(-data.x / width) * factor.x * 100}%`;
     image.style['top'] = `${(-data.y / height) * factor.y * 100}%`;
+}
+
+/**
+ * @param {Element} outer
+ */
+function cropButton(outer) {
+    const scripts = outer.getElementsByTagName('script');
+    if (scripts.length != 1) {
+        return;
+    }
+
+    const data = getDataFromJson(scripts[0]);
+    cropButtonWithData(outer, data);
 }
 
 window.addEventListener('load', () => {
