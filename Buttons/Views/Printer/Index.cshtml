@@ -17,12 +17,14 @@
 }
 
 <form id="selection-form" method="post" asp-action="Print">
+    <h1>Select Buttons for Printing</h1>
     <section id="selection-filters">
 
     </section>
     <section id="selection-items"></section>
     <section id="selection-buttons">
-        <button type="submit" name="print-selection" title="Print all buttons that were selected in the box above.">Print Selected Buttons</button>
+        <button title="Select all buttons that match the filters.">Select All</button>
+        <button type="submit" name="print-selection" title="Print all buttons that were selected in the box above.">Print Selected Buttons (<span id="selection-count">0</span>)</button>
         <button type="submit" name="print-all" title="Print all buttons that were not printed yet.">Print All Buttons</button>
     </section>
 </form>

@@ -13,6 +13,37 @@ body {
     height: 100%;
 }
 
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+    font-size: 1.5rem;
+    text-decoration: none;
+    cursor: pointer;
+
+    color: #999;
+    background-color: #222;
+    border: 3px solid #555;
+    outline: none;
+    border-radius: 10px;
+
+    transition: 0.25s;
+}
+
+button:hover, button:focus-visible {
+    color: #333;
+    border-color: #999;
+    background-color: #999;
+}
+
+button:active {
+    color: #333;
+    border-color: #090;
+    background-color: #090;
+}
+
 /* General Button */
 
 .button-outer {
@@ -33,13 +64,80 @@ body {
 
 /* Print Selection */
 
+#selection-form {
+    display: flex;
+    flex-direction: column;
+    width: calc(100vw - 2rem);
+    height: calc(100vh - 2rem);
+}
+
+#selection-form h1 {
+    font-size: 3rem;
+    align-self: center;
+}
+
 #selection-items {
+    flex: 1;
+
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+
+    overflow-y: auto;
 }
 
 .selection-button {
-    width: 12rem;
+    width: 13rem;
+    height: auto;
     aspect-ratio: 1;
+}
+
+.selection-button input[type=checkbox] {
+    display: none;
+}
+
+.selection-button label {
+    display: block;
+    padding: 0.3rem;
+    cursor: pointer;
+
+    border: 2px solid transparent;
+    border-radius: 10px;
+
+    transition: 0.1s;
+}
+
+.selection-button label:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.selection-button label:active {
+    border-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.selection-button input[type=checkbox]:checked + label {
+    border-color: rgba(36, 130, 50, 0.75);
+    background-color: rgba(36, 130, 50, 0.3);
+}
+
+.selection-button input[type=checkbox]:checked + label:hover {
+    border-color: rgba(36, 130, 50, 0.9);
+    background-color: rgba(36, 130, 50, 0.5);
+}
+
+.selection-button input[type=checkbox]:checked + label:active {
+    border-color: rgba(36, 130, 50, 1);
+    background-color: rgba(36, 130, 50, 0.6);
+}
+
+#selection-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+
+    margin-top: 1rem;
 }
