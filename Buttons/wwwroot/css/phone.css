@@ -143,6 +143,10 @@ input[type=text]:focus-visible {
     cursor: pointer;
 }
 
+.overview-item .button-outer[data-status=Uploaded] {
+    border-color: #9e1922;
+}
+
 #detail-view {
     display: none;
 

@@ -158,6 +158,18 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            switch (button.Status)
+            {
+                case ButtonStatus.Uploaded:
+                    break;
+                case ButtonStatus.Confirmed:
+                    button.Status = ButtonStatus.Uploaded;
+                    await context.SaveChangesAsync();
+                    break;
+                case ButtonStatus.Printed:
+                    return RedirectToAction(nameof(Index));
+            }
+
             return View(CreateViewModel(button));
         }
 
@@ -174,10 +186,6 @@ namespace Buttons.Controllers
             }
 
             // Cannot change a button that has already been printed.
-            //
-            // This is only handled on the post action:
-            // For printed buttons no edit link should be shown,
-            // so this action should not be reached through regular means.
             if (button.Status == ButtonStatus.Printed)
             {
                 return RedirectToAction(nameof(Index));
@@ -257,12 +265,18 @@ namespace Buttons.Controllers
             try
             {
                 string targetPath = Path.Combine(configuration.ButtonsPath, button.Path);
-                System.IO.File.Delete(targetPath);
+                if (System.IO.File.Exists(targetPath))
+                {
+                    System.IO.File.Delete(targetPath);
+                }
+                else
+                {
+                    logger.LogError("File not found: file {} of button {}", button.Path, id);
+                }
             }
             catch (Exception e)
             {
                 logger.LogError(e, "Failed to delete file {} of button {}", button.Path, id);
-                return RedirectToAction(nameof(Index));
             }
 
             context.Buttons.Remove(button);
