@@ -1,0 +1,16 @@
+﻿@model ButtonListViewModel
+@{
+    Layout = "_LayoutPrint";
+    ViewData["Title"] = "Button Printing";
+}
+
+@section Scripts
+{
+    <script src="~/js/common.js" asp-append-version="true" type="text/javascript"></script>
+    <script src="~/js/print.js" asp-append-version="true" type="text/javascript"></script>
+}
+
+@foreach (var button in Model.Items)
+{
+    <partial name="_Button" for="@button" />
+}

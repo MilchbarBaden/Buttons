@@ -55,6 +55,13 @@ function createButton(button) {
     return outer;
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('selection-form');
+    form.addEventListener('submit', () => {
+        setTimeout(() => window.location.reload(), 1000);
+    });
+});
+
 window.addEventListener('load', () => {
     const buttonContainer = document.getElementById('selection-items');
     const jsonScript = document.getElementById('selection-data');
@@ -63,5 +70,11 @@ window.addEventListener('load', () => {
     for (const button of buttonData) {
         const element = createButton(button);
         buttonContainer.appendChild(element);
+    }
+
+    if (buttonData.length == 0) {
+        const empty = document.createElement('h2');
+        empty.innerText = 'There are no buttons yet';
+        buttonContainer.appendChild(empty);
     }
 });
