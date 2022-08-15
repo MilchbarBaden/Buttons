@@ -2,6 +2,8 @@
 @{
     Layout = "_LayoutPrint";
     ViewData["Title"] = "Button Printing";
+
+    const int ItemsPerPage = 24;
 }
 
 @section Scripts
@@ -10,7 +12,18 @@
     <script src="~/js/print.js" asp-append-version="true" type="text/javascript"></script>
 }
 
-@foreach (var button in Model.Items)
-{
-    <partial name="_Button" for="@button" />
-}
+<h1 class="no-print">Close this tab after printing, if it did not close automatically</h1>
+
+<section class="print-buttons">
+    @foreach (var page in Model.Items.Chunk(ItemsPerPage))
+    {
+        <div class="print-page">
+            @foreach (var button in page)
+            {
+                <div class="print-button">
+                    <partial name="_Button" for="@button" />
+                </div>
+            }
+        </div>
+    }
+</section>

@@ -1,3 +1,44 @@
 ﻿@page {
     size: A4 portrait;
+    margin: 0.8cm 1cm;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+}
+
+/* General Button */
+
+.button-outer {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1px solid black;
+    background-color: #fff;
+}
+
+.button-image {
+    position: relative;
+}
+
+/* Print */
+
+.print-page {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1mm;
+    justify-content: center;
+
+    page-break-after: always;
+}
+
+.print-button {
+    width: 4.5cm;
+    height: 4.5cm;
 }
