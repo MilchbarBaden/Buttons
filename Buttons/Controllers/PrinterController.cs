@@ -98,13 +98,10 @@ namespace Buttons.Controllers
                 .OrderBy(b => b.Created)
                 .ToList();
 
-            if (!buttonEntities.Any())
+            if (buttonEntities.Any())
             {
-                logger.LogWarning("No buttons found for printing");
-                return RedirectToAction(nameof(Index)); // TODO: Close instead of redirect
+                await MarkButtonsAsPrinted(buttonEntities);
             }
-
-            await MarkButtonsAsPrinted(buttonEntities);
 
             var buttonViewModels = buttonEntities.Select(CreateViewModel).ToList();
             return View(new AdminButtonListViewModel(buttonViewModels));
