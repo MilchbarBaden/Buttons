@@ -13,24 +13,30 @@ body {
     height: 100%;
 }
 
+button, input, label {
+    transition: 0.25s;
+    font-size: 1.5rem;
+
+    color: #999;
+}
+
+button, input[type=text] {
+    padding: 1rem;
+    text-decoration: none;
+
+    background-color: #222;
+    border: 3px solid #555;
+    outline: none;
+    border-radius: 10px;
+}
+
 button {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
 
-    padding: 1rem;
-    font-size: 1.5rem;
-    text-decoration: none;
     cursor: pointer;
-
-    color: #999;
-    background-color: #222;
-    border: 3px solid #555;
-    outline: none;
-    border-radius: 10px;
-
-    transition: 0.25s;
 }
 
 button:hover, button:focus-visible {
@@ -62,6 +68,10 @@ button.button-red:active {
     background-color: #e3242b;
 }
 
+input[type=text]:focus-visible {
+    border-color: #999;
+}
+
 /* General Button */
 
 .button-outer {
@@ -82,9 +92,22 @@ button.button-red:active {
 
 /* Print Selection */
 
+#selection-filters {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: column;
+}
+
 #selection-form {
     display: flex;
     flex-direction: column;
+    gap: 1rem;
     width: calc(100vw - 2rem);
     height: calc(100vh - 2rem);
 }
@@ -92,6 +115,8 @@ button.button-red:active {
 #selection-form h1 {
     font-size: 3rem;
     align-self: center;
+    margin-top: 2rem;
+    margin-bottom: 0;
 }
 
 #selection-items {
@@ -156,6 +181,4 @@ button.button-red:active {
     display: flex;
     gap: 1rem;
     justify-content: center;
-
-    margin-top: 1rem;
 }

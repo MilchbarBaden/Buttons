@@ -19,11 +19,15 @@
 <form id="selection-form" method="post" asp-action="Print" target="_blank">
     <h1>Select Buttons for Printing</h1>
     <section id="selection-filters">
-
+        <input type="text" id="selection-filter" placeholder="Search..." />
+        <div class="checkbox-container">
+            <label><input type="checkbox" id="selection-not-printed" checked="checked" /> Not Printed</label>
+            <label><input type="checkbox" id="selection-printed" /> Printed</label>
+        </div>
+        <button id="selection-select-all" type="button" title="Select all buttons that match the filters.">Select All</button>
     </section>
-    <section id="selection-items"></section>
+    <section id="selection-items">@* Populated by script *@</section>
     <section id="selection-buttons">
-        <button title="Select all buttons that match the filters.">Select All</button>
         <button type="submit" name="delete-selection" class="button-red" title="Delete all buttons that were selected in the box above.">Delete Selected Buttons <span>(<span class="selection-count">0</span>)</span></button>
         <button type="submit" name="print-selection" title="Print all buttons that were selected in the box above.">Print Selected Buttons <span>(<span class="selection-count">0</span>)</span></button>
         <button type="submit" name="print-all" title="Print all buttons that were not printed yet.">Print All Buttons</button>
