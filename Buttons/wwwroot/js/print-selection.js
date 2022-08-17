@@ -12,8 +12,12 @@ function getFilters() {
 
 function buttonMatchesFilter(button, filter) {
     const show = button.Status == 'Printed' ? filter.showPrinted : filter.showNotPrinted;
-    // TODO: Handle User Search
-    return show;
+    const matchesSearch =
+        `${button.Id}`.includes(filter.search) ||
+        button.Name.includes(filter.search) ||
+        `${button.OwnerId}`.includes(filter.search) ||
+        button.OwnerName.includes(filter.search);
+    return show && matchesSearch;
 }
 
 function reloadSelectionItems() {
@@ -21,7 +25,6 @@ function reloadSelectionItems() {
     const filter = getFilters();
 
     buttonContainer.innerText = '';
-
     let addedCount = 0;
     for (const button of buttonData) {
         if (buttonMatchesFilter(button, filter)) {
@@ -138,14 +141,16 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const filterElements = [
-        document.getElementById('selection-filter'),
+    const checkboxElements = [
         document.getElementById('selection-not-printed'),
         document.getElementById('selection-printed')
     ];
-    for (const filter of filterElements) {
+    for (const filter of checkboxElements) {
         filter.addEventListener('change', () => reloadSelectionItems());
     }
+
+    const filterElement = document.getElementById('selection-filter');
+    filterElement.addEventListener('input', () => reloadSelectionItems());
 });
 
 window.addEventListener('load', () => {
