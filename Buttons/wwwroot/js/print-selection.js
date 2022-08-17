@@ -13,8 +13,10 @@ function checkboxChanged(checkbox, button) {
         checked.delete(button.Id);
     }
 
-    const selectionCount = document.getElementById('selection-count');
-    selectionCount.innerText = `${checked.size}`;
+    const selectionCounts = document.getElementsByClassName('selection-count');
+    for (const selectionCount of selectionCounts) {
+        selectionCount.innerText = `${checked.size}`;
+    }
 }
 
 function createButton(button) {
@@ -44,6 +46,7 @@ function createButton(button) {
         cropButtonWithData(buttonOuter, cropData));
     image.classList.add('button-image');
     image.setAttribute('src', `/buttons/${button.Path}`);
+    image.setAttribute('title', `${button.Name} by ${button.OwnerName} [${button.Id} by ${button.OwnerId}]`);
 
     buttonOuter.appendChild(image);
     label.appendChild(buttonOuter);
@@ -60,6 +63,15 @@ window.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', () => {
         setTimeout(() => window.location.reload(), 1000);
     });
+
+    const deleteButton = document.getElementsByName('delete-selection')[0];
+    deleteButton.addEventListener('click', e => {
+        if (checked.size == 0 || !confirm(`Do you really want do delete ${checked.size} button(s)?`)) {
+            e.preventDefault();
+        } else {
+            // TODO: remove target=_blank
+        }
+    })
 });
 
 window.addEventListener('load', () => {

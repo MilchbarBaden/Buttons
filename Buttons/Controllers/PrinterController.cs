@@ -2,6 +2,7 @@
 using Buttons.Models;
 using Buttons.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Buttons.Controllers
 {
@@ -23,8 +24,8 @@ namespace Buttons.Controllers
             this.configuration = configuration;
         }
 
-        private ButtonViewModel CreateViewModel(Button button) =>
-            new(button.Id, button.Path, button.Status.ToString(), button.Crop.Clone());
+        private AdminButtonViewModel CreateViewModel(Button button) =>
+            new(button.Id, button.Path, button.Status.ToString(), button.Crop.Clone(), button.Name, button.Owner.Id, button.Owner.Name);
 
         private async Task MarkButtonsAsPrinted(IEnumerable<Button> buttons)
         {
@@ -35,18 +36,39 @@ namespace Buttons.Controllers
             await context.SaveChangesAsync();
         }
 
+        private async Task<IActionResult> DeleteButtons(int[] buttons)
+        {
+            HashSet<int> buttonsToPrint = new(buttons);
+            var selectedButtons = context.Buttons
+                .Where(b => b.Status >= ButtonStatus.Confirmed)
+                .Where(b => buttonsToPrint.Contains(b.Id));
+
+            context.Buttons.RemoveRange(selectedButtons);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public IActionResult Index()
         {
             var buttons = context.Buttons
+                .Include(b => b.Owner)
                 .Where(b => b.Status >= ButtonStatus.Confirmed)
                 .OrderByDescending(b => b.LastModified)
                 .Select(CreateViewModel)
                 .ToList();
-            return View(new ButtonListViewModel(buttons));
+            return View(new AdminButtonListViewModel(buttons));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Print(int[] buttons, IFormCollection collection)
         {
+            if (collection.ContainsKey("delete-selection"))
+            {
+                return await DeleteButtons(buttons);
+            }
+
             IQueryable<Button> buttonQuery;
             if (collection.ContainsKey("print-all"))
             {
@@ -72,6 +94,7 @@ namespace Buttons.Controllers
 
             // Make sure the query is only evaluated once.
             var buttonEntities = buttonQuery
+                .Include(b => b.Owner)
                 .OrderBy(b => b.Created)
                 .ToList();
 
@@ -84,7 +107,7 @@ namespace Buttons.Controllers
             await MarkButtonsAsPrinted(buttonEntities);
 
             var buttonViewModels = buttonEntities.Select(CreateViewModel).ToList();
-            return View(new ButtonListViewModel(buttonViewModels));
+            return View(new AdminButtonListViewModel(buttonViewModels));
         }
     }
 }

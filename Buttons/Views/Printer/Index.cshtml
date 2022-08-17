@@ -1,5 +1,5 @@
 ﻿@using System.Text.Json
-@model ButtonListViewModel
+@model AdminButtonListViewModel
 @{
     ViewData["Title"] = "Select Buttons for Print";
 }
@@ -24,7 +24,8 @@
     <section id="selection-items"></section>
     <section id="selection-buttons">
         <button title="Select all buttons that match the filters.">Select All</button>
-        <button type="submit" name="print-selection" title="Print all buttons that were selected in the box above.">Print Selected Buttons (<span id="selection-count">0</span>)</button>
+        <button type="submit" name="delete-selection" class="button-red" title="Delete all buttons that were selected in the box above.">Delete Selected Buttons <span>(<span class="selection-count">0</span>)</span></button>
+        <button type="submit" name="print-selection" title="Print all buttons that were selected in the box above.">Print Selected Buttons <span>(<span class="selection-count">0</span>)</span></button>
         <button type="submit" name="print-all" title="Print all buttons that were not printed yet.">Print All Buttons</button>
     </section>
 </form>

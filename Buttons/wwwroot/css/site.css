@@ -17,6 +17,7 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
 
     padding: 1rem;
     font-size: 1.5rem;
@@ -42,6 +43,23 @@ button:active {
     color: #333;
     border-color: #090;
     background-color: #090;
+}
+
+button.button-red {
+    color: #e3242b;
+    border: 3px solid #990f02;
+}
+
+button.button-red:hover, button.button-red:focus-visible {
+    color: #333;
+    border-color: #e3242b;
+    background-color: #e3242b;
+}
+
+button.button-red:active {
+    color: #333;
+    border-color: #e3242b;
+    background-color: #e3242b;
 }
 
 /* General Button */
