@@ -14,11 +14,6 @@ body {
     padding-top: 1rem;
 }
 
-.filled {
-    width: 100%;
-    height: 100%;
-}
-
 .flex-container {
     display: flex;
     flex-direction: column;
@@ -95,7 +90,8 @@ input[type=text]:focus-visible {
 .fill-box {
     position: relative;
 
-    flex: 1; /* filling remaining height */
+    flex: 1 1 auto; /* filling remaining height */
+    overflow: hidden;
 
     box-sizing: border-box;
     width: calc(100vw - 2rem);
@@ -240,6 +236,11 @@ input[type=text]:focus-visible {
 }
 
 /* Crop */
+
+.crop-filled {
+    width: 100%;
+    height: 100%;
+}
 
 #crop-image {
     object-fit: contain;
