@@ -251,7 +251,8 @@ input[type=text]:focus-visible {
 }
 
 span.cropper-view-box {
-    outline: 3px solid #248232;
+    outline: 0;
+    box-shadow: 0 0 0 3px #248232;
 }
 
 span.cropper-face {
