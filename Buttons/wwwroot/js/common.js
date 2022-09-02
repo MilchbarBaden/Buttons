@@ -41,7 +41,7 @@ function cropButtonWithData(outer, data) {
  */
 function cropButton(outer) {
     const scripts = outer.getElementsByTagName('script');
-    if (scripts.length != 1) {
+    if (scripts.length !== 1) {
         return;
     }
 

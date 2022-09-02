@@ -11,7 +11,7 @@ function getFilters() {
 }
 
 function buttonMatchesFilter(button, filter) {
-    const show = button.Status == 'Printed' ? filter.showPrinted : filter.showNotPrinted;
+    const show = button.Status === 'Printed' ? filter.showPrinted : filter.showNotPrinted;
     const matchesSearch =
         `${button.Id}`.includes(filter.search) ||
         button.Name.includes(filter.search) ||
@@ -34,9 +34,9 @@ function reloadSelectionItems() {
         }
     }
 
-    if (addedCount == 0) {
+    if (addedCount === 0) {
         const empty = document.createElement('h2');
-        empty.innerText = buttonData.length == 0 ?
+        empty.innerText = buttonData.length === 0 ?
             'There are no buttons yet' :
             'No buttons match the filters';
         buttonContainer.appendChild(empty);
@@ -133,7 +133,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     const deleteButton = document.getElementsByName('delete-selection')[0];
     deleteButton.addEventListener('click', e => {
-        if (checked.size == 0 || !confirm(`Do you really want do delete ${checked.size} button(s)?`)) {
+        if (checked.size === 0 || !confirm(`Do you really want do delete ${checked.size} button(s)?`)) {
             e.preventDefault();
         } else {
             // Submit the form, but do not open a new tab in the delete case.

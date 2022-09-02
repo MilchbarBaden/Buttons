@@ -61,7 +61,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Close detail page when background is clicked.
     detailView.addEventListener('click', event => {
-        if (event.target == detailView) {
+        if (event.target === detailView) {
             detailView.style['display'] = 'none';
         }
     });
