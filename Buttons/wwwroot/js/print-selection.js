@@ -12,11 +12,12 @@ function getFilters() {
 
 function buttonMatchesFilter(button, filter) {
     const show = button.Status === 'Printed' ? filter.showPrinted : filter.showNotPrinted;
+    const search = filter.search.toLowerCase();
     const matchesSearch =
-        `${button.Id}`.includes(filter.search) ||
-        button.Name.includes(filter.search) ||
-        `${button.OwnerId}`.includes(filter.search) ||
-        button.OwnerName.includes(filter.search);
+        button.Name.toLowerCase().includes(search) ||
+        button.OwnerName.toLowerCase().includes(search) ||
+        `${button.Id}`.toLowerCase() === search.trim() ||
+        (search.length >= 3 && `${button.OwnerId}`.toLowerCase().includes(search));
     return show && matchesSearch;
 }
 
