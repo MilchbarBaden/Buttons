@@ -1,0 +1,16 @@
+﻿@model LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+@if (Model.ErrorMessage != null)
+{
+    <h2 style="color: red">@Model.ErrorMessage</h2>
+}
+
+<form method="post">
+    <input type="password" name="password" placeholder="Password..." autofocus="autofocus" />
+    <button type="submit">Login</button>
+</form>

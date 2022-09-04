@@ -12,4 +12,6 @@ namespace Buttons.Models
         ButtonViewModel(Id, Path, Status, Crop);
 
     public record AdminButtonListViewModel(IList<AdminButtonViewModel> Items);
+
+    public record LoginViewModel(string? ErrorMessage = null);
 }

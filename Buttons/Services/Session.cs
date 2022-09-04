@@ -5,6 +5,8 @@ namespace Buttons.Services
     public class Session
     {
         private const string UserIdKey = "UserId";
+        private const string AdminAccessVersionKey = "AdminAccessVersion";
+
         private readonly ISession session;
         private readonly ButtonContext context;
 
@@ -44,5 +46,9 @@ namespace Buttons.Services
             }
             return owner;
         }
+
+        public int? GetAdminAccessVersion() => session.GetInt32(AdminAccessVersionKey);
+
+        public void SetAdminAccessVersion(int accessVersion) => session.SetInt32(AdminAccessVersionKey, accessVersion);
     }
 }

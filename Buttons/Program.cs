@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddDbContext<ButtonContext>(
     options => options.UseInMemoryDatabase("ButtonDatabase"));
 
@@ -20,7 +19,9 @@ builder.Services.AddSession(options =>
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
-builder.Services.AddSingleton<Configuration>();
+builder.Services
+    .AddSingleton<Configuration>()
+    .AddSingleton<PasswordManager>();
 
 var app = builder.Build();
 
