@@ -14,4 +14,6 @@ namespace Buttons.Models
     public record AdminButtonListViewModel(IList<AdminButtonViewModel> Items);
 
     public record LoginViewModel(string? ErrorMessage = null);
+
+    public record ChangePasswordViewModel(string? ErrorMessage = null);
 }

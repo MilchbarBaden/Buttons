@@ -149,7 +149,7 @@ namespace Buttons.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(string password)
         {
-            if (passwordManager.HasPassword)
+            if (passwordManager.HasPassword || password == null)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -190,7 +190,7 @@ namespace Buttons.Controllers
                 return RedirectToAction(nameof(SetPassword));
             }
 
-            if (HasAccess)
+            if (HasAccess || password == null)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -204,6 +204,43 @@ namespace Buttons.Controllers
             }
 
             logger.LogInformation("Successful login from {}", HttpContext.Connection.RemoteIpAddress);
+            Session.SetAdminAccessVersion(accessVersion);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ChangePassword()
+        {
+            if (!passwordManager.HasPassword)
+            {
+                return RedirectToAction(nameof(SetPassword));
+            }
+
+            return View(new ChangePasswordViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword)
+        {
+            if (!passwordManager.HasPassword)
+            {
+                return RedirectToAction(nameof(SetPassword));
+            }
+
+            if (oldPassword == null || newPassword == null)
+            {
+                return RedirectToAction(nameof(ChangePassword));
+            }
+
+            var (success, accessVersion) = await passwordManager.ChangePasswordAsync(oldPassword, newPassword);
+
+            if (!success)
+            {
+                logger.LogWarning("Failed to change password from {}", HttpContext.Connection.RemoteIpAddress);
+                return View(new ChangePasswordViewModel("Entered password is invalid."));
+            }
+
+            logger.LogInformation("Successful password change from {}", HttpContext.Connection.RemoteIpAddress);
             Session.SetAdminAccessVersion(accessVersion);
             return RedirectToAction(nameof(Index));
         }
