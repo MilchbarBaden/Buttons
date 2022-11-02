@@ -2,12 +2,12 @@
 
 function flattenCropData(nestedData) {
     return {
-        x: nestedData.Offset.Item1,
-        y: nestedData.Offset.Item2,
-        width: nestedData.Size.Item1,
-        height: nestedData.Size.Item2,
-        scaleX: nestedData.Scale.Item1,
-        scaleY: nestedData.Scale.Item2,
+        x: nestedData.OffsetX,
+        y: nestedData.OffsetY,
+        width: nestedData.Width,
+        height: nestedData.Height,
+        scaleX: nestedData.ScaleX,
+        scaleY: nestedData.ScaleY,
     };
 }
 
