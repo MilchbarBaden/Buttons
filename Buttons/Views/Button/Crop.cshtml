@@ -11,12 +11,12 @@
 }
 
 <form id="crop-form" method="post" asp-route-id="@Model.Id" class="flex-container">
-    <input type="hidden" name="x" value="@Model.Crop.Offset.x" />
-    <input type="hidden" name="y" value="@Model.Crop.Offset.y" />
-    <input type="hidden" name="width" value="@Model.Crop.Size.x" />
-    <input type="hidden" name="height" value="@Model.Crop.Size.y" />
-    <input type="hidden" name="scaleX" value="@Model.Crop.Scale.x" />
-    <input type="hidden" name="scaleY" value="@Model.Crop.Scale.y" />
+    <input type="hidden" name="x" value="@Model.Crop.OffsetX" />
+    <input type="hidden" name="y" value="@Model.Crop.OffsetY" />
+    <input type="hidden" name="width" value="@Model.Crop.Width" />
+    <input type="hidden" name="height" value="@Model.Crop.Height" />
+    <input type="hidden" name="scaleX" value="@Model.Crop.ScaleX" />
+    <input type="hidden" name="scaleY" value="@Model.Crop.ScaleY" />
     <div class="fill-box border">
         <div class="crop-filled"><img id="crop-image" src="~/buttons/@Model.Path" /></div>
     </div>

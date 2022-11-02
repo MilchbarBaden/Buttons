@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ButtonContext>(
-    options => options.UseInMemoryDatabase("ButtonDatabase"));
+    options => { options.UseSqlite("Data Source=Buttons.db;Cache=Shared"); options.EnableSensitiveDataLogging(); });
 
 builder.Services.AddControllersWithViews();
 
@@ -25,6 +25,12 @@ builder.Services
 
 var app = builder.Build();
 
+// Create Database if it does not exist.
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<ButtonContext>().Database.EnsureCreated();
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -33,7 +39,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

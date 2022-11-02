@@ -193,9 +193,12 @@ namespace Buttons.Controllers
 
             button.Crop = new Crop()
             {
-                Offset = (x, y),
-                Size = (width, height),
-                Scale = (scaleX, scaleY),
+                OffsetX = x,
+                OffsetY = y,
+                Width = width,
+                Height = height,
+                ScaleX = scaleX,
+                ScaleY = scaleY,
             };
             button.Status = ButtonStatus.Uploaded;
             await context.SaveChangesAsync();
