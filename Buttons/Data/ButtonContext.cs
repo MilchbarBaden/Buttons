@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Buttons.Data
 {
@@ -9,26 +10,33 @@ namespace Buttons.Data
 
         public ButtonContext(DbContextOptions<ButtonContext> dbContextOptions) : base(dbContextOptions)
         {
-            ChangeTracker.Tracked += ChangeTrackerTracked;
-            ChangeTracker.StateChanged += ChangeTrackerStateChanged;
+            SavingChanges += ContextSavingChanges;
+            ChangeTracker.AutoDetectChangesEnabled = false;
         }
 
-        private void ChangeTrackerTracked(object? sender, Microsoft.EntityFrameworkCore.ChangeTracking.EntityTrackedEventArgs e)
+        private void ContextSavingChanges(object? sender, SavingChangesEventArgs e)
         {
-            if (!e.FromQuery && e.Entry.State == EntityState.Added && e.Entry.Entity is DateEntity newEntity)
+            ChangeTracker.DetectChanges();
+
+            foreach (var entry in ChangeTracker.Entries<DateEntity>().Where(IsModified))
             {
-                newEntity.Created = DateTime.Now;
-                newEntity.LastModified = DateTime.Now;
+                entry.Entity.LastModified = DateTime.Now;
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.Created = DateTime.Now;
+                }
+                else if (entry.State == EntityState.Unchanged)
+                {
+                    // Set state to modified, if change originates from an owned entity.
+                    // This is required for SaveChanges to update the changed LastModified propoerty
+                    // in the database without running ChangeTracker.DetectChanges() again.
+                    entry.State = EntityState.Modified;
+                }
             }
         }
 
-        private void ChangeTrackerStateChanged(object? sender, Microsoft.EntityFrameworkCore.ChangeTracking.EntityStateChangedEventArgs e)
-        {
-            if (e.NewState == EntityState.Modified && e.Entry.Entity is DateEntity dateEntity)
-            {
-                dateEntity.LastModified = DateTime.Now;
-                SaveChanges();
-            }
-        }
+        private static bool IsModified(EntityEntry entry) =>
+            entry.State == EntityState.Modified || entry.State == EntityState.Added ||
+            entry.References.Any(r => r.TargetEntry != null && r.TargetEntry.Metadata.IsOwned() && IsModified(r.TargetEntry));
     }
 }

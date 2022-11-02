@@ -9,7 +9,7 @@ namespace Buttons.Data
         public string Name { get; set; } = string.Empty;
         public string Path { get; set; } = string.Empty;
         public ButtonStatus Status { get; set; }
-        public virtual Crop Crop { get; set; } = new Crop();
+        public Crop Crop { get; set; } = new Crop();
 
         public string OwnerId { get; set; }
         public virtual Owner Owner { get; set; }
