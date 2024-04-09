@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ButtonContext>(
-    options => { options.UseSqlite("Data Source=Buttons.db;Cache=Shared"); options.EnableSensitiveDataLogging(); });
+builder.Services.AddDbContext<ButtonContext>(options =>
+{
+    options.UseSqlite("Data Source=Database/Buttons.db;Cache=Shared");
+    // options.EnableSensitiveDataLogging();
+});
 
 builder.Services.AddControllersWithViews();
 
@@ -39,7 +42,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
